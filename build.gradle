@@ -1,0 +1,86 @@
+plugins {
+    id 'org.springframework.boot' version '2.5.14'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id "io.freefair.lombok" version "8.6"
+    id 'java'
+}
+
+// JaCoCo for test coverage
+plugins {
+    id 'jacoco'
+}
+
+group = 'org.newbank'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.h2database:h2'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.security:spring-security-crypto'
+
+
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mockito:mockito-core:3.+'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.required.set(false)
+        html.required.set(true)
+    }
+    // Exclude DTO classes from coverage report
+    classDirectories.setFrom(files(sourceSets.main.output.classesDirs.files.collect { dir ->
+        fileTree(dir: dir, exclude: ['com/newbank/userservice/dto/**'])
+    }))
+}
+
+// Coverage verification: fail build if coverage below threshold
+jacocoTestCoverageVerification {
+    dependsOn test
+    // Ensure report task runs first to produce necessary outputs
+    dependsOn tasks.named('jacocoTestReport')
+    violationRules {
+        rule {
+            limit {
+                counter = 'INSTRUCTION'
+                // use enum name expected by JaCoCo (no underscore)
+                value = 'COVEREDRATIO'
+                minimum = 0.80
+            }
+        }
+    }
+    // Use same classDirs exclusion as report
+    classDirectories.setFrom(files(sourceSets.main.output.classesDirs.files.collect { dir ->
+        fileTree(dir: dir, exclude: ['com/newbank/userservice/dto/**'])
+    }))
+    executionData.setFrom(fileTree(dir: project.buildDir, include: '**/jacoco/*.exec'))
+}
+
+// Make 'check' depend on coverage verification so it runs with the build lifecycle
+tasks.named('check') {
+    dependsOn tasks.named('jacocoTestCoverageVerification')
+}

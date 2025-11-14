@@ -1,0 +1,107 @@
+.gradle
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### IntelliJ IDEA ###
+.idea/modules.xml
+.idea/jarRepositories.xml
+.idea/compiler.xml
+.idea/libraries/
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### Eclipse ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+bin/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### VS Code ###
+.vscode/
+
+### Mac OS ###
+.DS_Store
+
+# Gradle and build outputs
+/.gradle/
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs and temp files
+*.log
+logs/
+tmp/
+*.tmp
+*.swp
+*~
+
+# Java artifacts
+*.class
+*.jar
+*.war
+*.ear
+
+# Generated sources and IDE folders
+/out/
+/bin/
+/.settings/
+
+# Coverage and jacoco
+**/jacoco.exec
+**/jacoco/*.exec
+
+# Local configuration and secrets
+.env
+.env.local
+local.properties
+secrets.properties
+*.jks
+*.keystore
+*.pem
+*.p12
+
+# Misc
+/.idea_modules/
+.idea_modules/
