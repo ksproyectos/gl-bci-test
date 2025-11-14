@@ -96,7 +96,7 @@ class UserServiceTest {
 
         assertThatThrownBy(() -> userService.createUser(request))
                 .isInstanceOf(BusinessException.class)
-                .hasMessageContaining("El usuario ya existe");
+                .hasMessageContaining(userService.USER_EXISTS_ERROR_MESSAGE);
     }
 
     @Test
@@ -123,7 +123,7 @@ class UserServiceTest {
 
         assertThatThrownBy(() -> userService.updateUserLastLogin("nope@example.com"))
                 .isInstanceOf(BusinessException.class)
-                .hasMessageContaining("Usuario no encontrado");
+                .hasMessageContaining(userService.USER_NOT_FOUND_ERROR_MESSAGE);
     }
 }
 

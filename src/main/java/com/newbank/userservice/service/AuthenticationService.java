@@ -13,8 +13,8 @@ import java.util.stream.Collectors;
 @Service
 public class AuthenticationService{
 
-    private final String EMAIL_FORMAT_ERROR_MESSAGE = "Email format is invalid";
-    private final String PASSWORD_FORMAT_ERROR_MESSAGE = "Password does not meet the required format";
+    public final String EMAIL_FORMAT_ERROR_MESSAGE = "Email format is invalid";
+    public final String PASSWORD_FORMAT_ERROR_MESSAGE = "Password does not meet the required format";
 
     private final UserService userService;
     private final JwtUtil jwtUtil;

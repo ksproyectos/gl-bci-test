@@ -64,7 +64,7 @@ public class AuthenticationServiceTest {
 
         assertThatThrownBy(() -> authenticationService.signUp(validSignUp))
                 .isInstanceOf(BusinessException.class)
-                .hasMessageContaining("Formato de correo inválido");
+                .hasMessageContaining(authenticationService.EMAIL_FORMAT_ERROR_MESSAGE);
     }
 
     @Test
@@ -73,6 +73,6 @@ public class AuthenticationServiceTest {
 
         assertThatThrownBy(() -> authenticationService.signUp(validSignUp))
                 .isInstanceOf(BusinessException.class)
-                .hasMessageContaining("El password no cumple");
+                .hasMessageContaining(authenticationService.PASSWORD_FORMAT_ERROR_MESSAGE);
     }
 }

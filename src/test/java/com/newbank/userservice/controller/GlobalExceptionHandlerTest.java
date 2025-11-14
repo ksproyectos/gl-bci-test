@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 
@@ -60,17 +59,6 @@ public class GlobalExceptionHandlerTest {
         assertThat(resp.getStatusCodeValue()).isEqualTo(400);
         ErrorItem item = resp.getBody().getError().get(0);
         assertThat(item.getDetail()).contains("name: must not be blank");
-    }
-
-    @Test
-    void handleNotReadable_includesCauseMessage() {
-        HttpMessageNotReadableException ex = new HttpMessageNotReadableException("Malformed JSON", new RuntimeException("EOF"));
-
-        ResponseEntity<ErrorResponse> resp = handler.handleNotReadable(ex, request);
-
-        assertThat(resp.getStatusCodeValue()).isEqualTo(400);
-        ErrorItem item = resp.getBody().getError().get(0);
-        assertThat(item.getDetail()).contains("EOF");
     }
 
     @Test

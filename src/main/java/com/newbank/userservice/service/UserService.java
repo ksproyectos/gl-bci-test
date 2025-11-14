@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @Service
 public class UserService {
 
-    private final String USER_EXISTS_ERROR_MESSAGE = "User already exists";
+    public final String USER_EXISTS_ERROR_MESSAGE = "User already exists";
 
-    private final String USER_NOT_FOUND_ERROR_MESSAGE = "User not found";
+    public final String USER_NOT_FOUND_ERROR_MESSAGE = "User not found";
 
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
