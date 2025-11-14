@@ -9,8 +9,14 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+
 @Service
 public class UserService {
+
+    private final String USER_EXISTS_ERROR_MESSAGE = "User already exists";
+
+    private final String USER_NOT_FOUND_ERROR_MESSAGE = "User not found";
+
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -27,7 +33,7 @@ public class UserService {
     public UserDTO createUser(UserDTO userDTO){
 
         if(userExists(userDTO.getEmail())){
-            throw new BusinessException("El usuario ya existe");
+            throw new BusinessException(USER_EXISTS_ERROR_MESSAGE);
         };
 
         UserEntity userEntity = new UserEntity();
@@ -48,7 +54,7 @@ public class UserService {
     public UserDTO updateUserLastLogin(String email) {
 
         UserEntity userEntity =  repository.findByEmail(email).orElseThrow( () ->
-            new BusinessException("Usuario no encontrado"));
+            new BusinessException(USER_NOT_FOUND_ERROR_MESSAGE));
 
         userEntity.setLastLogin(LocalDateTime.now());
 

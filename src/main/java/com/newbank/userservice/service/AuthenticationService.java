@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 @Service
 public class AuthenticationService{
 
+    private final String EMAIL_FORMAT_ERROR_MESSAGE = "Email format is invalid";
+    private final String PASSWORD_FORMAT_ERROR_MESSAGE = "Password does not meet the required format";
+
     private final UserService userService;
     private final JwtUtil jwtUtil;
 
@@ -66,13 +69,13 @@ public class AuthenticationService{
 
     private void validateEmail(String email) {
         if (email == null || !EMAIL_PATTERN.matcher(email).matches()) {
-            throw new BusinessException("Formato de correo inválido");
+            throw new BusinessException(EMAIL_FORMAT_ERROR_MESSAGE);
         }
     }
 
     private void validatePassword(String password) {
         if (password == null || !PASSWORD_PATTERN.matcher(password).matches()) {
-            throw new BusinessException("El password no cumple el formato requerido");
+            throw new BusinessException(PASSWORD_FORMAT_ERROR_MESSAGE);
         }
     }
 
