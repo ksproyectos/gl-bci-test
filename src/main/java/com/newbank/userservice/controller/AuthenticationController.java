@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/")
@@ -24,7 +25,7 @@ public class AuthenticationController {
         return ResponseEntity.ok(authenticationService.signUp(request));
     }
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) {
+    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO request) throws ExecutionException, InterruptedException {
         return ResponseEntity.ok(authenticationService.login(request));
     }
 }

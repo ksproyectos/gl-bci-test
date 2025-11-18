@@ -94,7 +94,7 @@ public class AuthenticationServiceTest {
         returned.setEmail("user@example.com");
         returned.setActive(true);
 
-        when(userService.updateUserLastLogin("user@example.com")).thenReturn(returned);
+        when(userService.updateUserLastLoginAsync("user@example.com")).thenReturn(java.util.concurrent.CompletableFuture.completedFuture(returned));
         when(jwtUtil.generateToken(anyString())).thenReturn("new-token");
 
         LoginResponseDTO resp = authenticationService.login(request);
