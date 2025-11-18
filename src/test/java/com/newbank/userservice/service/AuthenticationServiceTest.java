@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -79,7 +80,7 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    void ShouldReturnValidResponseWhenLoginSuccess() {
+    void ShouldReturnValidResponseWhenLoginSuccess() throws ExecutionException, InterruptedException {
 
         LoginRequestDTO request = new LoginRequestDTO();
         request.setToken("dummy-token");
