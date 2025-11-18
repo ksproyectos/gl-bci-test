@@ -11,8 +11,6 @@ class JwtUtilTest {
     @Test
     void generateAndValidateToken_andExtractUsername() {
         JwtUtil jwtUtil = new JwtUtil();
-
-        // set a positive expiration so token is valid for the test
         try {
             java.lang.reflect.Field f = JwtUtil.class.getDeclaredField("jwtExpirationInMs");
             f.setAccessible(true);
@@ -33,8 +31,6 @@ class JwtUtilTest {
     @Test
     void expiredToken_isNotValid() throws Exception {
         JwtUtil jwtUtil = new JwtUtil();
-
-        // set expiration to a negative value so token is immediately expired
         Field f = JwtUtil.class.getDeclaredField("jwtExpirationInMs");
         f.setAccessible(true);
         f.setLong(jwtUtil, -1000L);

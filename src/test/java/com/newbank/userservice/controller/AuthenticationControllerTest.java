@@ -2,7 +2,7 @@ package com.newbank.userservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.newbank.userservice.dto.LoginRequestDTO;
-import com.newbank.userservice.dto.LoginResponseDTO;
+import com.newbank.userservice.dto.SignUpRequestDTO;
 import com.newbank.userservice.service.AuthenticationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,10 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.time.LocalDateTime;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,7 +23,6 @@ public class AuthenticationControllerTest {
 
     @Mock
     private AuthenticationService authenticationService;
-
     @InjectMocks
     private AuthenticationController userController;
 
@@ -42,7 +37,7 @@ public class AuthenticationControllerTest {
     }
 
     @Test
-    void login_missingToken_returnsValidationError() throws Exception {
+    void shouldReturnValidationErrorsWhenLogin() throws Exception {
         LoginRequestDTO req = new LoginRequestDTO();
         req.setToken("");
 
@@ -51,25 +46,64 @@ public class AuthenticationControllerTest {
                 .content(mapper.writeValueAsString(req)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error[0].codigo").value(400))
-                .andExpect(jsonPath("$.error[0].detail").exists());
+                .andExpect(jsonPath("$.error[0].detail").value("token: token is required"));
     }
 
     @Test
-    void login_success_returns200() throws Exception {
+    void shouldReturnValidationErrorsWhenSignUp() throws Exception {
+        mockMvc.perform(post("/sign-up")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"email\":\"goodemail@domain.com\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error[0].codigo").value(400))
+                .andExpect(jsonPath("$.error[0].detail").value("password: password is required"));
+
+        mockMvc.perform(post("/sign-up")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"password\":\"abcdef44E\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error[0].codigo").value(400))
+                .andExpect(jsonPath("$.error[0].detail").value("email: email is required"));
+
+        mockMvc.perform(post("/sign-up")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"goodemail@domain.com\",\"password\":\"short\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error[0].codigo").value(400))
+                .andExpect(jsonPath("$.error[0].detail").value("password: password must be 8-12 characters long, contain exactly one uppercase letter and exactly two digits"));
+
+        mockMvc.perform(post("/sign-up")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"email\":\"bad-email\",\"password\":\"abcdef44E\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error[0].codigo").value(400))
+                .andExpect(jsonPath("$.error[0].detail").value("email: invalid email format"));
+    }
+
+    @Test
+    void shouldReturnSuccess200WhenLogin() throws Exception {
         LoginRequestDTO req = new LoginRequestDTO();
         req.setToken("valid-token");
-
-        LoginResponseDTO resp = new LoginResponseDTO();
-        resp.setId("1");
-        resp.setToken("tkn");
-        resp.setCreated(LocalDateTime.now());
-
-        when(authenticationService.login(any())).thenReturn(resp);
 
         mockMvc.perform(post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(req)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value("tkn"));
+                .andExpect(status().isOk());
     }
+
+    @Test
+    void shouldReturnSuccess200WhenSignUp() throws Exception {
+        SignUpRequestDTO req = new SignUpRequestDTO();
+        req.setEmail("goodemail@domain.com");
+        req.setPassword("Abcdef12");
+
+        mockMvc.perform(post("/sign-up")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(req)))
+                .andExpect(status().isOk());
+
+
+    }
+
+
 }

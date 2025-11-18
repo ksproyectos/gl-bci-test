@@ -62,10 +62,10 @@ class UserServiceTest {
 
     @Test
     void createUser_success_savesAndReturnsDto() {
-        // repository returns empty -> user does not exist
+
         when(repository.findByEmail("new@example.com")).thenReturn(Optional.empty());
 
-        // mimic save: return the same entity passed
+
         when(repository.save(any(UserEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         UserDTO request = new UserDTO();
