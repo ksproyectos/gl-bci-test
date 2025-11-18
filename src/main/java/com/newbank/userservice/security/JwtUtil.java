@@ -17,8 +17,6 @@ public class JwtUtil {
 
 
     private String secret = Keys.secretKeyFor(SignatureAlgorithm.HS256).toString();
-
-    // Tiempo de expiración del token: 2 horas
     @Value("${jwt.expiration:7200000}")
     private long jwtExpirationInMs;
 
@@ -45,7 +43,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(subject)     // el email del usuario
+                .setSubject(subject)
                 .setIssuedAt(now)
                 .setExpiration(expiration)
                 .signWith(SignatureAlgorithm.HS256, secret.getBytes())

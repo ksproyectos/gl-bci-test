@@ -5,7 +5,6 @@ import com.newbank.userservice.dto.ErrorResponse;
 import com.newbank.userservice.exception.BusinessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -35,7 +34,7 @@ public class GlobalExceptionHandler {
             message = manv.getBindingResult().getFieldErrors().stream()
                     .map(e -> e.getField() + ": " + e.getDefaultMessage())
                     .collect(Collectors.joining(", "));
-        } else { // BindException
+        } else {
             BindException be = (BindException) ex;
             message = be.getBindingResult().getFieldErrors().stream()
                     .map(e -> e.getField() + ": " + e.getDefaultMessage())

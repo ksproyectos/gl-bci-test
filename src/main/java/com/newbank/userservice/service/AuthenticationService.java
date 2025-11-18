@@ -48,8 +48,6 @@ public class AuthenticationService{
         return responseDTO;
     }
 
-
-    //TODO: Cambiar el nombre de este metodo, si es para consultar un usuario no deberia llamarse login
     @Transactional
     public LoginResponseDTO login(LoginRequestDTO requestDTO){
 
