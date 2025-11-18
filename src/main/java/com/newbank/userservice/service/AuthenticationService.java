@@ -7,6 +7,7 @@ import com.newbank.userservice.security.JwtUtil;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -49,13 +50,13 @@ public class AuthenticationService{
     }
 
     @Transactional
-    public LoginResponseDTO login(LoginRequestDTO requestDTO){
+    public LoginResponseDTO login(LoginRequestDTO requestDTO) throws ExecutionException, InterruptedException {
 
         jwtUtil.isTokenValid(requestDTO.getToken());
 
         String email = jwtUtil.extractUsername(requestDTO.getToken());
 
-        UserDTO userDTO = userService.updateUserLastLogin(email);
+        UserDTO userDTO = userService.updateUserLastLoginAsync(email).get();
 
         LoginResponseDTO loginResponseDTO = toLoginResponse(userDTO);
 
@@ -66,7 +67,7 @@ public class AuthenticationService{
 
 
     private void validateEmail(String email) {
-        if (email == null || !EMAIL_PATTERN.matcher(email).matches()) {
+        if (email == null || email.isBlank() || !EMAIL_PATTERN.matcher(email).matches()) {
             throw new BusinessException(EMAIL_FORMAT_ERROR_MESSAGE);
         }
     }
